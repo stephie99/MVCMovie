@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MVC Agile Process with Agile.props" />
+</Project>
