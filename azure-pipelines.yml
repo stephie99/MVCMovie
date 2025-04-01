@@ -1,0 +1,47 @@
+trigger:
+- main
+ 
+pool:
+  name: agentSteph
+  demands:
+  - agent.os -equals Windows_NT
+ 
+variables:
+  buildConfiguration: 'Release'
+  solution: '**/*.sln'
+  projects: '**/*.csproj'
+ 
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET 8 SDK'
+  inputs:
+    version: '8.x'
+ 
+- task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
+  inputs:
+    command: 'restore'
+    projects: '$(projects)'
+ 
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+ 
+- task: DotNetCoreCLI@2
+  displayName: 'Publish web app'
+  inputs:
+    command: 'publish'
+    projects: '**/WebApp.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+ 
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish artifact'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'webapp'
+    publishLocation: 'pipeline'
+ 
