@@ -8,8 +8,8 @@ pool:
  
 variables:
   buildConfiguration: 'Release'
-  solution: '**/*.sln'
-  projects: '**/*.csproj'
+  solution: '**/MVC Agile Process with Agile.sln' # Update if you have a .sln file
+  projects: '**/MVC Agile Process with Agile.csproj'
  
 steps:
 - task: UseDotNet@2
